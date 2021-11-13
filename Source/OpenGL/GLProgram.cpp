@@ -8,6 +8,7 @@
 #include "../Program.h"
 #include <filesystem>
 #include <cassert>
+#include <format>
 #include <glad/glad.h>
 
 namespace fs = std::filesystem;

@@ -1,3 +1,4 @@
+# find_package(fmt CONFIG REQUIRED)
 set(SOURCES
     "GLCommandBuffer.cpp"
     "GLCommandBuffer.h"
