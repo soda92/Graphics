@@ -15,21 +15,22 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      - name: Setup devcmd
+      - name: Configure build for amd64
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
 
       - name: Install build tools
         run: |
           choco install ninja
 
-      # use the preinstalled vcpkg from image
-      # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#package-management
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v7
+      - name: Cache multiple paths
+        uses: actions/cache@v2
         with:
-          vcpkgDirectory: C:/vcpkg
-          doNotUpdateVcpkg: true  # the preinstalled vcpkg is updated regularly
-          setupOnly: true
+          path: |
+            C:/vcpkg
+            !C:/vcpkg/buildtrees
+          key: ${{ runner.os }}-${{ hashFiles('.github/workflows/commands.ps1') }}
 
       # tell vcpkg to only build Release variants of the dependencies
       - name: Configure vcpkg triplet overlay
@@ -39,7 +40,7 @@ jobs:
             -Name "triplets_overlay" `
             -ItemType Directory
           Copy-Item `
-            "${{ env.RUNVCPKG_VCPKG_ROOT }}/triplets/x64-windows-static.cmake" `
+            C:/vcpkg/triplets/x64-windows-static.cmake" `
             "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake"
           Add-Content `
             "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake" `
@@ -53,24 +54,17 @@ jobs:
             "glad:x64-windows-static-release",
             "assimp:x64-windows-static-release"
 
-          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
+          C:/vcpkg/vcpkg.exe upgrade `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --no-dry-run
-          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe install `
+          C:/vcpkg/vcpkg.exe install `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --clean-after-build `
             $packages
 
       - name: '🚧 Build package'
         run: |
-          cmake `
-            -B build `
-            -G "Ninja" `
-            -DCMAKE_TOOLCHAIN_FILE="${{ env.RUNVCPKG_VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" `
-            -Dglfw3_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glfw3_x64-windows-static/share/glfw3/" `
-            -Dglad_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glad_x64-windows-static/share/glad/" `
-            -Dassimp_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/assimp_x64-windows-static/share/assimp/"
-          cmake --build build
+          pwsh .github/workflows/commands.ps1
           New-Item -Type Directory build/dist
           Copy-Item build/${{env.prog_name}} build/dist/
           Copy-Item -Recurse Examples/Triangle/Shaders build/dist/
