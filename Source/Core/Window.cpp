@@ -1,9 +1,10 @@
-// Copyright 2021 SMS
+﻿// Copyright 2021 SMS
 // License(Apache-2.0)
 
 #include "Window.h"
 #include "Image.h"
 #include <cassert>
+#include <format>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -15,7 +16,6 @@ Window::Window(const std::string& title, Vector2i size, bool fullscreen)
     const auto videoMode = glfwGetVideoMode(monitor);
 
     handle = glfwCreateWindow(size.x, size.y, title.c_str(), fullscreen ? monitor : nullptr, nullptr);
-    // videoMode->width, videoMode->height
 
     // TODO: OpenGL/Glad 相关代码, 转移到合适的位置
     glfwMakeContextCurrent(handle);
