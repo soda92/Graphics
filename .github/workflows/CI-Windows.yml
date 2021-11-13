@@ -40,7 +40,7 @@ jobs:
             -Name "triplets_overlay" `
             -ItemType Directory
           Copy-Item `
-            C:/vcpkg/triplets/x64-windows-static.cmake" `
+            "C:/vcpkg/triplets/x64-windows-static.cmake" `
             "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake"
           Add-Content `
             "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake" `
