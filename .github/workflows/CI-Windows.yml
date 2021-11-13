@@ -66,7 +66,7 @@ jobs:
           cmake `
             -B build `
             -G "Ninja" `
-            -Dglfw3_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glfw3_x64-windows-static/share/glfw3/" `
+            -DCMAKE_TOOLCHAIN_FILE="${{ env.RUNVCPKG_VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" `
             -Dglfw3_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glfw3_x64-windows-static/share/glfw3/" `
             -Dglad_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glad_x64-windows-static/share/glad/" `
             -Dassimp_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/assimp_x64-windows-static/share/assimp/"

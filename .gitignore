@@ -13,7 +13,7 @@ Makefile
 *.filters
 *.user
 /.vs
-/.vscode
+# /.vscode
 
 # Doxygen
 /Doc/html

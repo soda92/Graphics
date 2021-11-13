@@ -1,0 +1,9 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cmake.configureSettings": {
+        "CMAKE_TOOLCHAIN_FILE": "D:/src/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "glfw3_DIR": "D:/src/vcpkg/packages/glfw3_x64-windows-static/share/glfw3/",
+        "glad_DIR": "D:/src/vcpkg/packages/glad_x64-windows-static/share/glad/",
+        "assimp_DIR": "D:/src/vcpkg/packages/assimp_x64-windows-static/share/assimp"
+    }
+}
