@@ -32,34 +32,9 @@ jobs:
             !C:/vcpkg/buildtrees
           key: ${{ runner.os }}-${{ hashFiles('.github/workflows/commands.ps1') }}
 
-      # tell vcpkg to only build Release variants of the dependencies
-      - name: Configure vcpkg triplet overlay
-        run: |
-          New-Item `
-            -Path "${{ github.workspace }}" `
-            -Name "triplets_overlay" `
-            -ItemType Directory
-          Copy-Item `
-            "C:/vcpkg/triplets/x64-windows-static.cmake" `
-            "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake"
-          Add-Content `
-            "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake" `
-            -Value "set(VCPKG_BUILD_TYPE release)"
-
-      # clear buildtrees after each package installation to reduce disk space requirements
       - name: Install dependencies
         run: |
-          $packages = `
-            "glfw3:x64-windows-static-release",
-            "glad:x64-windows-static-release",
-            "assimp:x64-windows-static-release"
-
-          C:/vcpkg/vcpkg.exe upgrade `
-            --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
-            --no-dry-run
-          C:/vcpkg/vcpkg.exe install `
-            --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
-            $packages
+          C:/vcpkg/vcpkg.exe install glfw3 glad assimp --triplet x64-windows-static
 
       - name: '🚧 Build package'
         run: |
