@@ -35,9 +35,9 @@ set (PROJECT_SOURCES
     "VertexFormat.h"
     # "Window.cpp"
 )
-set(glfw3_DIR "D:/src/vcpkg/packages/glfw3_x64-windows-static/share/glfw3/")
-set(glad_DIR "D:/src/vcpkg/packages/glad_x64-windows-static/share/glad/")
-set(assimp_DIR "D:/src/vcpkg/packages/assimp_x64-windows-static/share/assimp/")
+# set(glfw3_DIR "D:/src/vcpkg/packages/glfw3_x64-windows-static/share/glfw3/")
+# set(glad_DIR "D:/src/vcpkg/packages/glad_x64-windows-static/share/glad/")
+# set(assimp_DIR "D:/src/vcpkg/packages/assimp_x64-windows-static/share/assimp/")
 
 find_package(assimp CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)

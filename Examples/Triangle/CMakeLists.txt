@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION "3.16")
 project(Triangle)
 
-set(glfw3_DIR "D:/src/vcpkg/packages/glfw3_x64-windows-static/share/glfw3/")
-set(glad_DIR "D:/src/vcpkg/packages/glad_x64-windows-static/share/glad/")
-set(assimp_DIR "D:/src/vcpkg/packages/assimp_x64-windows-static/share/assimp/")
-
+# set(glfw3_DIR "D:/src/vcpkg/packages/glfw3_x64-windows-static/share/glfw3/")
+# set(glad_DIR "D:/src/vcpkg/packages/glad_x64-windows-static/share/glad/")
+# set(assimp_DIR "D:/src/vcpkg/packages/assimp_x64-windows-static/share/assimp/")
 
 find_package(glad CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
@@ -35,3 +34,5 @@ set_property(TARGET main PROPERTY CXX_STANDARD 23)
 set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED ON)
 # add_subdirectory(../../Source build)
 target_link_libraries(main PRIVATE assimp::assimp Graphics glad::glad)
+
+file(COPY Shaders DESTINATION ".")

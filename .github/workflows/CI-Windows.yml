@@ -1,0 +1,82 @@
+name: CI - Windows
+on: [pull_request, push]
+
+jobs:
+  build:
+    name: 🚧Build
+    runs-on: windows-latest
+
+    env:
+      prog_name: Examples/Triangle/main.exe
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Setup devcmd
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install build tools
+        run: |
+          choco install ninja
+
+      # use the preinstalled vcpkg from image
+      # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#package-management
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v7
+        with:
+          vcpkgDirectory: C:/vcpkg
+          doNotUpdateVcpkg: true  # the preinstalled vcpkg is updated regularly
+          setupOnly: true
+
+      # tell vcpkg to only build Release variants of the dependencies
+      - name: Configure vcpkg triplet overlay
+        run: |
+          New-Item `
+            -Path "${{ github.workspace }}" `
+            -Name "triplets_overlay" `
+            -ItemType Directory
+          Copy-Item `
+            "${{ env.RUNVCPKG_VCPKG_ROOT }}/triplets/x64-windows-static.cmake" `
+            "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake"
+          Add-Content `
+            "${{ github.workspace }}/triplets_overlay/x64-windows-static-release.cmake" `
+            -Value "set(VCPKG_BUILD_TYPE release)"
+
+      # clear buildtrees after each package installation to reduce disk space requirements
+      - name: Install dependencies
+        run: |
+          $packages = `
+            "glfw3:x64-windows-static-release",
+            "glad:x64-windows-static-release",
+            "assimp:x64-windows-static-release"
+
+          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
+            --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
+            --no-dry-run
+          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe install `
+            --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
+            --clean-after-build `
+            $packages
+
+    - name: '🚧 Build package'
+      run: |
+        cmake `
+          -B build `
+          -G "Ninja" `
+          -Dglfw3_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glfw3_x64-windows-static/share/glfw3/" `
+          -Dglfw3_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glfw3_x64-windows-static/share/glfw3/" `
+          -Dglad_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/glad_x64-windows-static/share/glad/" `
+          -Dassimp_DIR="${{ env.RUNVCPKG_VCPKG_ROOT }}/packages/assimp_x64-windows-static/share/assimp/"
+        cmake --build build
+        New-Item -Type Directory build/dist
+        Copy-Item build/${{env.prog_name}} build/dist/
+        Copy-Item -Recurse Examples/Triangle/Shaders build/dist/
+
+    - name: '📤 upload package'
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: build/dist
