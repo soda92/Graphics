@@ -34,7 +34,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          C:/vcpkg/vcpkg.exe install glfw3 glad assimp --triplet x64-windows-static
+          pwsh .github/workflows/installation.ps1
 
       - name: '🚧 Build package'
         run: |
