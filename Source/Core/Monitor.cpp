@@ -1,4 +1,4 @@
-﻿// Copyright 2021 SMS
+﻿// Copyright 2021 ShenMian
 // License(Apache-2.0)
 
 #include "Monitor.h"
@@ -37,6 +37,11 @@ int Monitor::getRefreshRate() const
 bool Monitor::isPrimary() const
 {
     return handle == glfwGetPrimaryMonitor();
+}
+
+void* Monitor::getNativeHandle() const
+{
+    return handle;
 }
 
 Monitor::Monitor(GLFWmonitor* handle)

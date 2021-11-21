@@ -1,7 +1,7 @@
 # Build
 [Bb]uild/
 [Bb]in/
-!thirdparty/premake/bin/
+!ThirdParty/premake/bin/
 
 # Makefile
 Makefile
@@ -16,7 +16,7 @@ Makefile
 # /.vscode
 
 # Doxygen
-/Doc/html
+/Docs/html
 
 # Prerequisites
 *.d
