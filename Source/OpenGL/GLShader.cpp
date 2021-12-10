@@ -17,7 +17,7 @@ namespace
 std::unordered_map<Shader::Stage, GLenum> GLStage = {
 	{Shader::Stage::Vertex, GL_VERTEX_SHADER},
 	{Shader::Stage::Geometry, GL_GEOMETRY_SHADER},
-	{Shader::Stage::Fragment, GL_FRAGMENT_SHADER} };
+	{Shader::Stage::Fragment, GL_FRAGMENT_SHADER}};
 
 }
 
@@ -45,7 +45,7 @@ void GLShader::load()
 		assert(file.is_open());
 
 		std::vector<std::byte> buffer(size);
-		file.read((char*)buffer.data(), size);
+		file.read(reinterpret_cast<char*>(buffer.data()), size);
 		assert(file.good() && file.gcount() == size);
 		file.close();
 
@@ -67,7 +67,7 @@ void GLShader::load()
 		// 读取源代码
 		std::string buffer;
 		buffer.resize(size);
-		file.read((char*)buffer.data(), size);
+		file.read(reinterpret_cast<char*>(buffer.data()), size);
 		assert(file.good() && file.gcount() == size);
 		buffer += "\0";
 

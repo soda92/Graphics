@@ -4,8 +4,8 @@ project "assimp"
 	staticruntime "on"
 	warnings "Off"
 
-	targetdir("%{wks.location}/build/" .. outputdir .. "/%{prj.name}/lib")
-	objdir("%{wks.location}/build/" .. outputdir .. "/%{prj.name}/obj")
+	prebuildcommands {
+		"{COPY} \"%{deps.assimp}/contrib/zlib/zconf.h.in\" \"%{deps.assimp}/contrib/zlib/zconf.h\""}
 
 	sysincludedirs {
 		"assimp",
@@ -37,7 +37,7 @@ project "assimp"
 		"ASSIMP_BUILD_NO_AC_IMPORTER",
 		"ASSIMP_BUILD_NO_AMF_IMPORTER",
 		"ASSIMP_BUILD_NO_ASE_IMPORTER",
-		-- "ASSIMP_BUILD_NO_ASSBIN_IMPORTER"
+		-- "ASSIMP_BUILD_NO_ASSBIN_IMPORTER",
 		"ASSIMP_BUILD_NO_B3D_IMPORTER",
 		"ASSIMP_BUILD_NO_BLEND_IMPORTER",
 		"ASSIMP_BUILD_NO_BVH_IMPORTER",
