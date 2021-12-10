@@ -4,8 +4,7 @@ project "glfw"
 	staticruntime "on"
 	warnings "Off"
 
-	targetdir("%{wks.location}/build/" .. outputdir .. "/%{prj.name}/lib")
-	objdir("%{wks.location}/build/" .. outputdir .. "/%{prj.name}/obj")
+	removeplatforms "emscripten"
 
 	files {
 		"glfw/include/GLFW/glfw3.h",
@@ -25,7 +24,7 @@ project "glfw"
 		systemversion "latest"
 
 		defines {"_GLFW_X11"}
-		
+
 		files {
 			"glfw/src/platform.c",
 			"glfw/src/null_init.c",
@@ -41,7 +40,7 @@ project "glfw"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines { 
+		defines {
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"}
 
@@ -50,6 +49,23 @@ project "glfw"
 			"glfw/src/null_*.c",
 			"glfw/src/win32_*.c",
 			"glfw/src/wgl_context.c",
+			"glfw/src/egl_context.c",
+			"glfw/src/osmesa_context.c"}
+
+
+	filter "system:macosx"
+		defines {
+			"_GLFW_COCOA",
+			"_GLFW_USE_RETINA"}
+
+		files {
+			"glfw/src/cocoa_init.m",
+			"glfw/src/cocoa_joystick.m",
+			"glfw/src/cocoa_monitor.m",
+			"glfw/src/cocoa_window.m",
+			"glfw/src/cocoa_time.c",
+			"glfw/src/nsgl_context.m",
+			"glfw/src/posix_thread.c",
 			"glfw/src/egl_context.c",
 			"glfw/src/osmesa_context.c"}
 

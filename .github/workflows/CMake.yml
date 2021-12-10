@@ -1,0 +1,32 @@
+name: CMake
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [windows-latest] # ubuntu-latest, macos-latest
+        arch: [x64, x86, arm64, arm]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup MSVC Developer Command Environment
+        uses: ilammy/msvc-dev-cmd@v1.10.0
+
+      - name: Build
+        run: ./Scripts/cmake_build.bat
+
+      - name: Upload libs
+        uses: actions/upload-artifact@v2
+        with:
+          name: graphics-${{matrix.arch}}
+          path: build/${{env.prog_name}}/lib
+
+      - name: Upload bins
+        uses: actions/upload-artifact@v2
+        with:
+          name: examples-${{matrix.arch}}
+          path: build/${{env.prog_name}}/bin
